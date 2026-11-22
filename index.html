@@ -236,6 +236,78 @@ select.in{appearance:none;background-image:linear-gradient(45deg,transparent 50%
 .invite b{font-size:16px;display:block}
 .invite small{opacity:.85;font-size:13px}
 .invite button{margin-left:auto;background:#fff;color:var(--jade);height:38px;padding:0 14px;border-radius:10px;font-weight:700;font-size:14px;flex:none}
+
+.onb{position:fixed;inset:0;max-width:520px;margin:0 auto;overflow:hidden;background:var(--bg)}
+.onb .slides{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.onb .slides::-webkit-scrollbar{display:none}
+.slide{flex:none;width:100%;height:100%;scroll-snap-align:start;display:flex;flex-direction:column;padding:calc(64px + env(safe-area-inset-top,0px)) 24px calc(150px + var(--safe-b));position:relative;overflow:hidden}
+.slide .art{flex:1;display:flex;align-items:center;justify-content:center;position:relative;min-height:0}
+.slide h2{font-size:28px;font-weight:800;line-height:1.32;letter-spacing:-.045em;word-break:keep-all;margin-top:12px}
+.slide p{font-size:16px;line-height:1.6;margin-top:10px;color:var(--sub);word-break:keep-all}
+.slide.s0{background:radial-gradient(120% 70% at 85% 10%,#1E9B80 0%,transparent 60%),radial-gradient(90% 60% at 0% 100%,#0A5546 0%,transparent 70%),#0E6E5B;color:#fff}
+.slide.s0::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.12) 1.2px,transparent 1.2px);background-size:22px 22px;mask-image:linear-gradient(to bottom,#000 0%,transparent 75%);-webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 75%)}
+.slide.s0 p{color:rgba(255,255,255,.78)}
+.slide.s1{background:linear-gradient(180deg,var(--indigo-soft) 0%,var(--bg) 78%)}
+.slide.s2{background:linear-gradient(180deg,var(--coral-soft) 0%,var(--bg) 78%)}
+.slide.s3{background:linear-gradient(180deg,var(--amber-soft) 0%,var(--bg) 78%)}
+.slide.s4{background:linear-gradient(180deg,var(--jade-soft) 0%,var(--bg) 78%)}
+.hero-brand{display:flex;align-items:center;gap:10px;position:relative}
+.hero-brand .mk{width:40px;height:40px;border-radius:13px;background:#fff;color:#0E6E5B;display:grid;place-items:center}
+.hero-brand span{font-size:22px;font-weight:800;letter-spacing:-.04em}
+.towns{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.towns span{font-size:13px;font-weight:600;padding:5px 11px;border-radius:14px;background:rgba(255,255,255,.14);color:#fff}
+.mock{background:var(--bg);color:var(--ink);border-radius:18px;box-shadow:0 18px 40px rgba(10,30,25,.22);padding:12px;display:flex;gap:12px;align-items:center;width:270px}
+.mock .ph{flex:none;width:64px;height:64px;border-radius:12px;display:grid;place-items:center;color:#fff}
+.mock .t{font-size:14.5px;font-weight:600;-webkit-line-clamp:1}
+.mock .m{font-size:12px;margin-top:1px}
+.mock .pr{font-size:15px;font-weight:800;margin-top:3px}
+.stack{position:relative;width:290px;height:300px}
+.stack .mock{position:absolute}
+.stack .c1{top:0;left:0;transform:rotate(-4deg)}
+.stack .c2{top:104px;left:22px;transform:rotate(3deg)}
+.stack .c3{top:208px;left:4px;transform:rotate(-2deg)}
+@media (prefers-reduced-motion:no-preference){
+  .stack .mock{animation:floaty 6s ease-in-out infinite}
+  .stack .c2{animation-delay:-2s}.stack .c3{animation-delay:-4s}
+}
+@keyframes floaty{0%,100%{translate:0 0}50%{translate:0 -6px}}
+.phone{width:250px;border-radius:30px;background:var(--bg);box-shadow:0 20px 50px rgba(30,40,90,.2);padding:14px;border:1px solid var(--line)}
+.phone .shot{height:150px;border-radius:18px;background:linear-gradient(135deg,#5B2A86,#8E5CC4);display:grid;place-items:center;color:#fff;position:relative}
+.phone .shot .cam{position:absolute;right:10px;bottom:10px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center}
+.phone .line{height:10px;border-radius:5px;background:var(--surface);margin-top:10px}
+.phone .aib{margin-top:12px;border-radius:14px;background:var(--indigo-soft);padding:10px 12px;font-size:12px;color:var(--indigo);font-weight:700}
+.phone .aib b{display:block;font-size:22px;color:var(--ink);letter-spacing:-.03em}
+.phone .aib small{font-weight:500;color:var(--sub)}
+.duo{display:flex;flex-direction:column;gap:12px;width:280px}
+.duo .mock{flex-direction:column;align-items:flex-start;gap:6px;padding:14px 16px;width:auto}
+.duo .mock:nth-child(2){margin-left:24px}
+.duo .row{display:flex;gap:10px;font-size:12px;color:var(--sub);align-items:center}
+.duo .row span{display:flex;gap:3px;align-items:center}
+.topics{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:290px;margin-bottom:14px}
+.topics span{font-size:13px;font-weight:600;padding:6px 12px;border-radius:15px;background:var(--bg);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.topics span.on{background:var(--amber);color:#fff}
+.safe{width:280px;display:flex;flex-direction:column;gap:10px}
+.safe div{display:flex;gap:12px;align-items:center;background:var(--bg);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(10,60,45,.1);font-size:14px}
+.safe i{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff;font-style:normal}
+.safe b{display:block;font-size:15px}
+.safe small{color:var(--sub)}
+.onb-ctrl{position:absolute;left:0;right:0;bottom:0;padding:0 24px calc(24px + var(--safe-b));z-index:3}
+.onb-dots{display:flex;gap:6px;margin-bottom:18px}
+.onb-dots i{width:6px;height:6px;border-radius:3px;background:var(--line);transition:width .25s,background .25s}
+.onb-dots i.on{width:20px;background:var(--ink)}
+.onb.dark .onb-dots i{background:rgba(255,255,255,.3)}.onb.dark .onb-dots i.on{background:#fff}
+.onb.dark #onbNext{background:#fff;color:#0E6E5B}
+.onb-skip{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:12px;z-index:3;font-size:14px;font-weight:600;color:var(--sub);padding:8px 10px}
+.onb.dark .onb-skip{color:rgba(255,255,255,.8)}
+.onb-ctrl .have{display:block;margin:12px auto 0;font-size:14px;color:var(--sub);font-weight:500}
+.onb.dark .onb-ctrl .have{color:rgba(255,255,255,.8)}
+.joinform{min-height:100vh;display:flex;flex-direction:column;padding:0 24px calc(24px + var(--safe-b))}
+.joinform .topbar{padding:0;margin:0 -8px}
+.joinform h2{font-size:26px;font-weight:800;letter-spacing:-.04em;line-height:1.35;margin:8px 0 6px}
+.joinform .lead{color:var(--sub);font-size:15px}
+.joinform .form{padding:8px 0 0}
+.joinform .spacer{flex:1;min-height:20px}
+.joinform .note{font-size:13px;color:var(--faint);text-align:center;margin-top:12px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -316,16 +388,61 @@ $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()})
 async function boot(){
   const {data:{session}}=await sb.auth.getSession();
   if(session){const {data}=await sb.from('profiles').select('*').eq('id',session.user.id).maybeSingle();if(data){me=data;return shell()}}
-  joinScreen();
+  onboarding();
+}
+
+function onboarding(){
+  const ph=(bg,ic)=>`<div class="ph" style="background:${bg}">${ic}</div>`;
+  const slides=[
+    `<div class="slide s0"><div class="hero-brand"><div class="mk">${I.mark}</div><span>한인동네</span></div>
+      <div class="art"><div class="stack">
+        <div class="mock c1">${ph('linear-gradient(135deg,#5B2A86,#8E5CC4)',I.bag)}<div><div class="t">다이슨 V11 무선청소기</div><div class="m">둘루스 · 12분 전</div><div class="pr">$200</div></div></div>
+        <div class="mock c2">${ph('var(--coral)',I.hands)}<div><div class="t">토요일 이사 도와주실 분</div><div class="m">스와니 · 사례 $80</div><div class="pr" style="color:var(--coral)">도와주세요</div></div></div>
+        <div class="mock c3">${ph('var(--amber)',I.news)}<div><div class="t">한국어 되는 소아과 추천</div><div class="m">존스크릭 · 댓글 12</div><div class="pr" style="color:var(--amber)">동네생활</div></div></div>
+      </div></div>
+      <h2>애틀랜타 한인 이웃,<br>여기 다 모였어요</h2>
+      <div class="towns"><span>둘루스</span><span>스와니</span><span>뷰포드</span><span>존스크릭</span><span>로렌스빌</span></div></div>`,
+    `<div class="slide s1"><div class="art"><div class="phone">
+        <div class="shot">${I.bag.replace('width="20" height="20"','width="54" height="54"')}<span class="cam">${I.cam}</span></div>
+        <div class="line" style="width:80%"></div><div class="line" style="width:55%"></div>
+        <div class="aib">✦ AI 추천 가격<b>$200</b><small>보통 $160~$240에 거래돼요</small></div></div></div>
+      <h2>사진 한 장이면<br>판매 글이 끝나요</h2><p>AI가 사진을 보고 제목, 설명, 동네 시세에 맞는 가격까지 채워줘요.</p></div>`,
+    `<div class="slide s2"><div class="art"><div class="duo">
+        <div class="mock"><span class="tag coral">도와주세요</span><div class="t">토요일 오전 이사 짐 옮길 분</div><div class="row"><span>${I.clock}11/29 오전 10시</span><b style="color:var(--ink)">사례 $80</b></div></div>
+        <div class="mock"><span class="tag indigo">도와드려요</span><div class="t">평일 저녁 공항 라이드 가능해요</div><div class="row"><span>${I.pin}스와니</span><b style="color:var(--ink)">식사 대접이면 충분해요</b></div></div>
+      </div></div>
+      <h2>이사, 라이드, 아이 돌봄<br>이웃끼리 품앗이해요</h2><p>도움이 필요할 때 부탁하고, 할 수 있는 일은 나눠요.</p></div>`,
+    `<div class="slide s3"><div class="art" style="flex-direction:column"><div class="topics"><span>맛집·카페</span><span class="on">병원·약국</span><span>학교·육아</span><span>구인구직</span><span>렌트·부동산</span><span>자동차·정비</span></div>
+        <div class="mock" style="flex-direction:column;align-items:flex-start;gap:4px;padding:14px 16px"><div class="t" style="font-weight:700">둘루스 한국어 되는 소아과 어디가 좋아요?</div><div class="m">하은맘 · 댓글 12</div>
+          <div style="font-size:13px;color:var(--sub);margin-top:4px;line-height:1.5">“OO 소아과 추천해요. 오전엔 대기 짧고 선생님이 한국어로 설명해 주세요.”</div></div></div>
+      <h2>맛집, 병원, 학교 정보<br>동네 사람에게 물어봐요</h2><p>검색으로 안 나오는 진짜 동네 이야기를 나눠요.</p></div>`,
+    `<div class="slide s4"><div class="art"><div class="safe">
+        <div><i style="background:var(--jade)">${I.user}</i><span><b>초대받은 사람만</b><small>아는 사람의 초대로만 들어와요</small></span></div>
+        <div><i style="background:var(--amber)">★</i><span><b>거래 후기</b><small>상대방의 평점을 보고 거래해요</small></span></div>
+        <div><i style="background:var(--indigo)">${I.shield}</i><span><b>안전 거래 장소</b><small>H마트 주차장처럼 밝은 곳에서 만나요</small></span></div>
+      </div></div>
+      <h2>아는 사람끼리라<br>더 믿을 수 있어요</h2><p>신고와 차단 기능으로 불편한 사람은 바로 걸러요.</p></div>`
+  ];
+  $('#root').innerHTML=`<div class="onb dark" id="onb"><button class="onb-skip" id="onbSkip">건너뛰기</button>
+    <div class="slides" id="slides">${slides.join('')}</div>
+    <div class="onb-ctrl"><div class="onb-dots" id="onbDots">${slides.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>
+      <button class="btn block" id="onbNext">다음</button><button class="have" id="onbHave">초대코드가 있어요</button></div></div>`;
+  const sl=$('#slides'),n=slides.length;
+  const idx=()=>Math.round(sl.scrollLeft/sl.clientWidth);
+  const sync=()=>{const i=idx();$$('#onbDots i').forEach((d,k)=>d.classList.toggle('on',k===i));$('#onb').classList.toggle('dark',i===0);
+    $('#onbNext').textContent=i===n-1?'초대코드로 시작하기':'다음';$('#onbSkip').style.visibility=i===n-1?'hidden':'visible'};
+  sl.onscroll=sync;
+  $('#onbNext').onclick=()=>{const i=idx();if(i===n-1)return joinScreen();sl.scrollTo({left:(i+1)*sl.clientWidth,behavior:'smooth'})};
+  $('#onbSkip').onclick=$('#onbHave').onclick=()=>joinScreen();
 }
 
 function joinScreen(){
   const pre=new URLSearchParams(location.search).get('code')||'';
-  $('#root').innerHTML=`<div class="app join">
-    <div class="brand"><div class="mk">${I.mark}</div><span>한인동네</span></div>
-    <h2>애틀랜타 한인 이웃끼리<br>사고, 나누고, 도와요</h2>
-    <p class="lead">초대받은 사람만 들어오는 우리 동네 공간이에요.</p>
-    <div class="quad">${Object.values(CATS).map(c=>`<div style="background:var(--${c.c}-soft);color:var(--${c.c})">${I[c.i]}${c.n}</div>`).join('')}</div>
+  $('#root').innerHTML=`<div class="app joinform">
+    <div class="topbar"><button class="icon-btn" id="joinBack" aria-label="소개 다시 보기">${I.back}</button></div>
+    <div class="brand" style="margin-top:8px"><div class="mk">${I.mark}</div></div>
+    <h2 style="margin-top:20px">반가워요!<br>동네에서 쓸 이름을 정해주세요</h2>
+    <p class="lead">회원가입 없이 이것만 입력하면 바로 시작해요.</p>
     <div class="form">
       <div class="field"><label for="code">초대코드</label><input class="in" id="code" value="${esc(pre)}" placeholder="받은 초대코드" autocapitalize="characters" autocomplete="off"></div>
       <div class="field"><label for="nick">닉네임</label><input class="in" id="nick" placeholder="동네에서 불릴 이름 (2~20자)" maxlength="20" autocomplete="nickname"></div>
@@ -333,8 +450,9 @@ function joinScreen(){
     </div>
     <div class="spacer"></div>
     <button class="btn block" id="joinBtn" style="margin-top:24px">시작하기</button>
-    <p class="note">회원가입 없이 이 기기에서 바로 쓸 수 있어요.<br>다른 기기에서는 초대코드를 한 번 더 입력하면 돼요.</p>
+    <p class="note">이 기기에서 계속 로그인된 상태로 쓸 수 있어요.<br>다른 기기에서는 초대코드를 한 번 더 입력하면 돼요.</p>
   </div>`;
+  $('#joinBack').onclick=()=>onboarding();
   $('#joinBtn').onclick=async()=>{
     const code=$('#code').value.trim(),nick=$('#nick').value.trim(),area=$('#area').value.trim();
     if(!code)return toast('초대코드를 입력해 주세요');
