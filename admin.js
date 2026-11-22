@@ -74,7 +74,7 @@ function renderAdmin(){
 async function adminQueue(){
   const box=A.querySelector('#aBody');
   const [{data:flag},{data:reps}]=await Promise.all([
-    sb.from('posts').select('*, profiles(nickname,role)').or('status.in.(held,hidden),spam_score.gt.0').order('created_at',{ascending:false}).limit(100),
+    sb.from('posts').select('*, profiles(nickname,role)').or('status.in.(held,hidden),spam_score.gt.1').order('created_at',{ascending:false}).limit(100),
     sb.from('reports').select('id,post_id,reason,created_at').eq('status','open').order('created_at',{ascending:false})]);
   const byPost={};(reps||[]).forEach(r=>{(byPost[r.post_id]=byPost[r.post_id]||[]).push(r)});
   const list=[...(flag||[])];const have=new Set(list.map(p=>p.id));
@@ -82,7 +82,7 @@ async function adminQueue(){
   if(missing.length){const {data}=await sb.from('posts').select('*, profiles(nickname,role)').in('id',missing);(data||[]).forEach(p=>list.push(p))}
   const rank=p=>(p.status==='held'?0:byPost[p.id]?1:p.status==='hidden'?2:3);
   list.sort((a,b)=>rank(a)-rank(b));
-  const shown=list.filter(p=>p.status!=='active'||byPost[p.id]||p.spam_score>0);
+  const shown=list.filter(p=>p.status!=='active'||byPost[p.id]||p.spam_score>1);
   if(!shown.length){box.innerHTML='<div class="empty"><b>검토할 글이 없어요</b>광고로 의심되거나 신고된 글이 생기면 여기에 모여요.</div>';return}
   box.innerHTML=`<p class="m" style="padding:12px 0 4px">자동 감지되거나 신고된 글 ${shown.length}개</p>`+shown.map(p=>{
     const rs=byPost[p.id]||[];
