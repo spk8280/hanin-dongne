@@ -74,12 +74,12 @@ function renderAdmin(){
 async function adminQueue(){
   const box=A.querySelector('#aBody');
   const [{data:flag},{data:reps}]=await Promise.all([
-    sb.from('posts').select('*, profiles(nickname,role)').or('status.in.(held,hidden),spam_score.gt.1').order('created_at',{ascending:false}).limit(100),
+    sb.from('posts').select('*, profiles!posts_user_id_fkey(nickname,role)').or('status.in.(held,hidden),spam_score.gt.1').order('created_at',{ascending:false}).limit(100),
     sb.from('reports').select('id,post_id,reason,created_at').eq('status','open').order('created_at',{ascending:false})]);
   const byPost={};(reps||[]).forEach(r=>{(byPost[r.post_id]=byPost[r.post_id]||[]).push(r)});
   const list=[...(flag||[])];const have=new Set(list.map(p=>p.id));
   const missing=Object.keys(byPost).filter(id=>!have.has(id));
-  if(missing.length){const {data}=await sb.from('posts').select('*, profiles(nickname,role)').in('id',missing);(data||[]).forEach(p=>list.push(p))}
+  if(missing.length){const {data}=await sb.from('posts').select('*, profiles!posts_user_id_fkey(nickname,role)').in('id',missing);(data||[]).forEach(p=>list.push(p))}
   const rank=p=>(p.status==='held'?0:byPost[p.id]?1:p.status==='hidden'?2:3);
   list.sort((a,b)=>rank(a)-rank(b));
   const shown=list.filter(p=>p.status!=='active'||byPost[p.id]||p.spam_score>1);
