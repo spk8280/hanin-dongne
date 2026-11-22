@@ -438,7 +438,7 @@ async function runAI(cat){
     const images=[];for(const p of photos.slice(0,4))images.push(await b64(await shrink(p.blob,768,0.75)));
     const {data,error}=await sb.functions.invoke('analyze-item',{body:{images,category:cat}});
     if(error){let msg=error.message;try{const j=await error.context.json();msg=j.error||msg}catch(e){}
-      tx.innerHTML=msg==='no_key'?'AI 자동 작성은 곧 열려요. 지금은 직접 입력해 주세요.':'AI가 분석하지 못했어요. 직접 입력하거나 다시 분석해 보세요.';return}
+      tx.innerHTML=msg.includes('하루')?esc(msg):msg==='no_key'?'AI 자동 작성은 곧 열려요. 지금은 직접 입력해 주세요.':'AI가 분석하지 못했어요. 직접 입력하거나 다시 분석해 보세요.';return}
     const set=(id,v)=>{const e=W.querySelector('#'+id);if(e&&v!=null)e.value=v};
     set('t',data.title);set('d',data.description);
     if(data.condition&&CONDITIONS.includes(data.condition))W.querySelectorAll('#cond button').forEach(b=>b.classList.toggle('on',b.dataset.v===data.condition));
