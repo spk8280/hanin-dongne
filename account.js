@@ -98,7 +98,8 @@ function loginSheet(existing){
     const {data,error}=await sb.functions.invoke('account',{body:{action:'set_login',login,password:pw}});
     b.disabled=false;
     if(error){let m='저장하지 못했어요';try{m=(await error.context.json()).error||m}catch(e){}return toast(m)}
-    await sb.auth.refreshSession();
+    const {error:e2}=await sb.auth.signInWithPassword({email:loginEmail(login),password:pw});
+    if(e2){closeSheet();toast('아이디를 만들었어요. 다시 로그인해 주세요');return setTimeout(()=>location.replace(SITE),1200)}
     closeSheet();toast(existing?'비밀번호를 바꿨어요':`아이디 ${data.login}을(를) 만들었어요`);
     if(tab==='me')render();
   };
