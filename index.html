@@ -5,82 +5,140 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>한인 동네</title>
 <meta name="theme-color" content="#E8613C">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="한인동네">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <style>
-:root{--bg:#FBF7F2;--card:#fff;--ink:#1F1A17;--muted:#7A6F68;--line:#EDE5DC;--brand:#E8613C;--brand-soft:#FDE9E1}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171412;--card:#221E1B;--ink:#F4EEE8;--muted:#A89D95;--line:#332D29;--brand:#F07A55;--brand-soft:#3A2620}}
-:root[data-theme="dark"]{--bg:#171412;--card:#221E1B;--ink:#F4EEE8;--muted:#A89D95;--line:#332D29;--brand:#F07A55;--brand-soft:#3A2620}
+:root{--bg:#FBF7F2;--card:#fff;--ink:#1F1A17;--muted:#7A6F68;--line:#EDE5DC;--brand:#E8613C;--brand-soft:#FDE9E1;--blue:#2E6FD8;--blue-soft:#E4EEFC;--green:#2F8F5B;--green-soft:#E1F3E8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171412;--card:#221E1B;--ink:#F4EEE8;--muted:#A89D95;--line:#332D29;--brand:#F07A55;--brand-soft:#3A2620;--blue:#7AA7F0;--blue-soft:#1C2A40;--green:#6CC394;--green-soft:#1A3326}}
+:root[data-theme="dark"]{--bg:#171412;--card:#221E1B;--ink:#F4EEE8;--muted:#A89D95;--line:#332D29;--brand:#F07A55;--brand-soft:#3A2620;--blue:#7AA7F0;--blue-soft:#1C2A40;--green:#6CC394;--green-soft:#1A3326}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',system-ui,sans-serif;font-size:15px;line-height:1.5;min-height:100vh}
+body{background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',system-ui,sans-serif;font-size:15px;line-height:1.5;min-height:100vh;-webkit-tap-highlight-color:transparent}
 button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 input,textarea,select{font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
 textarea{min-height:110px;resize:vertical}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:560px;margin:0 auto;padding:0 16px 110px}
-header{position:sticky;top:0;z-index:5;background:var(--bg);padding:14px 16px 8px;max-width:560px;margin:0 auto}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:14px 16px 6px;max-width:560px;margin:0 auto}
 .logo{font-weight:900;font-size:22px;letter-spacing:-.5px}
 .logo span{color:var(--brand)}
 .sub{color:var(--muted);font-size:13px}
 .tabs{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
 .tab{padding:7px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);white-space:nowrap;font-weight:500;font-size:14px}
 .tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:5px 11px;border-radius:999px;background:transparent;border:1px solid var(--line);white-space:nowrap;font-size:13px;color:var(--muted)}
+.chip.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand);font-weight:700}
+.chipgrid{display:flex;flex-wrap:wrap;gap:6px}
 .post{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer}
-.thumb{width:92px;height:92px;border-radius:12px;background:var(--brand-soft);flex:none;object-fit:cover;display:grid;place-items:center;font-size:30px}
+.thumb{width:92px;height:92px;border-radius:12px;background:var(--brand-soft);flex:none;object-fit:cover;display:grid;place-items:center;font-size:30px;position:relative;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb .cnt{position:absolute;right:5px;bottom:5px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:1px 6px;border-radius:8px}
 .post h3{font-size:16px;font-weight:500;line-height:1.35;word-break:break-word}
 .meta{color:var(--muted);font-size:12.5px;margin-top:2px}
 .price{font-weight:700;margin-top:4px}
-.badge{display:inline-block;font-size:11px;padding:2px 7px;border-radius:6px;background:var(--brand-soft);color:var(--brand);font-weight:700;margin-right:4px}
+.badge{display:inline-block;font-size:11px;padding:2px 7px;border-radius:6px;background:var(--brand-soft);color:var(--brand);font-weight:700;margin-right:4px;vertical-align:1px}
 .badge.gray{background:var(--line);color:var(--muted)}
+.badge.blue{background:var(--blue-soft);color:var(--blue)}
+.badge.green{background:var(--green-soft);color:var(--green)}
 .fab{position:fixed;right:max(16px,calc(50% - 264px));bottom:24px;background:var(--brand);color:#fff;font-weight:700;padding:14px 20px;border-radius:999px;box-shadow:0 8px 24px rgba(232,97,60,.35);z-index:6}
 .btn{display:block;width:100%;padding:14px;border-radius:12px;background:var(--brand);color:#fff;font-weight:700;text-align:center}
 .btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.ai{background:linear-gradient(135deg,#7B5CF0,#E8613C)}
 .btn:disabled{opacity:.5}
 label{display:block;font-weight:500;font-size:13.5px;margin:16px 0 6px}
-.row{display:flex;gap:8px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:5px}
+.row{display:flex;gap:8px;align-items:center}
+.check{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:14px}
+.check input{width:auto}
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:20;display:none;align-items:flex-end;justify-content:center}
 .sheet.on{display:flex}
-.panel{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 16px 32px}
+.panel{background:var(--bg);width:100%;max-width:560px;max-height:94vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px 16px 36px}
 .panel h2{font-size:19px;font-weight:700}
-.close{float:right;font-size:22px;color:var(--muted);line-height:1}
-.photo-pick{border:2px dashed var(--line);border-radius:14px;padding:22px;text-align:center;color:var(--muted);cursor:pointer}
-.photo-pick img{max-width:100%;max-height:220px;border-radius:10px}
-.detail-img{width:100%;border-radius:14px;margin:12px 0;max-height:360px;object-fit:cover;background:var(--brand-soft)}
+.close{float:right;font-size:22px;color:var(--muted);line-height:1;padding:2px 4px}
+.photo-btns{display:flex;gap:8px}
+.photo-btns button{flex:1;padding:14px 8px;border:2px dashed var(--line);border-radius:14px;color:var(--muted);font-weight:500}
+.strip{display:flex;gap:8px;overflow-x:auto;margin-top:10px}
+.strip .ph{position:relative;flex:none;width:84px;height:84px;border-radius:10px;overflow:hidden;background:var(--line)}
+.strip .ph img{width:100%;height:100%;object-fit:cover}
+.strip .ph .x{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:13px;line-height:22px;text-align:center}
+.strip .ph .main{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);color:#fff;font-size:11px;text-align:center}
+.aibox{margin-top:10px;padding:12px;border-radius:12px;background:var(--blue-soft);color:var(--blue);font-size:13.5px;display:none}
+.gallery{position:relative;margin:12px -16px;}
+.gtrack{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.gtrack::-webkit-scrollbar{display:none}
+.gtrack img{flex:none;width:100%;height:320px;object-fit:cover;scroll-snap-align:center;background:var(--brand-soft);cursor:zoom-in}
+.gcount{position:absolute;right:26px;bottom:10px;background:rgba(0,0,0,.6);color:#fff;font-size:12px;padding:2px 9px;border-radius:10px}
+.viewer{position:fixed;inset:0;background:#000;z-index:40;display:none}
+.viewer.on{display:block}
+.viewer .gtrack{height:100%}
+.viewer .gtrack img{height:100vh;object-fit:contain;background:#000;cursor:default}
+.viewer .vx{position:absolute;top:14px;right:16px;color:#fff;font-size:28px;z-index:2}
+.viewer .gcount{right:50%;transform:translateX(50%);bottom:24px}
+.facts{margin:10px 0;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.facts div{display:flex;justify-content:space-between;gap:12px;padding:9px 12px;border-bottom:1px solid var(--line);font-size:14px}
+.facts div:last-child{border-bottom:0}
+.facts span:first-child{color:var(--muted);flex:none}
+.facts span:last-child{text-align:right;word-break:break-word}
+.cmt{padding:10px 0;border-bottom:1px solid var(--line)}
+.cmt b{font-weight:700;font-size:13.5px}
 .empty{text-align:center;color:var(--muted);padding:60px 0}
 .join{padding-top:12vh}
 .join .logo{font-size:34px}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:30;display:none;max-width:90vw}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;z-index:50;display:none;max-width:90vw;text-align:center}
 .small{font-size:12.5px;color:var(--muted)}
 .links{display:flex;gap:14px;margin-top:18px;justify-content:center}
 .links button{color:var(--muted);font-size:13px;text-decoration:underline}
-.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px}
-.seg button{flex:1;padding:9px;border-radius:9px;font-size:14px}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px}
+.seg button{flex:1;padding:9px 4px;border-radius:9px;font-size:14px}
 .seg button.on{background:var(--brand);color:#fff;font-weight:700}
+.big-seg button{padding:14px 4px;font-size:15px}
+h4{font-size:15px;margin:22px 0 4px}
 </style>
 </head>
 <body>
 <div id="app"><div class="empty">불러오는 중...</div></div>
 <div class="toast" id="toast"></div>
 <div class="sheet" id="sheet"><div class="panel" id="panel"></div></div>
+<div class="viewer" id="viewer"></div>
+<input type="file" accept="image/*" capture="environment" id="camIn" hidden>
+<input type="file" accept="image/*" multiple id="albIn" hidden>
 
 <script>
 const SUPABASE_URL = 'https://oroygikugqzuxcinamwp.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_WW_d2tooXsiuMsiVz4mqDg_5Yb0_btO';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const MAX_PHOTOS = 8;
 
 const CATS = {sale:{n:'중고거래',e:'🛍️'},free:{n:'나눔',e:'🎁'},help:{n:'품앗이',e:'🤝'},info:{n:'생활정보',e:'📌'}};
-const STATUS = {active:'',reserved:'예약중',done:'거래완료'};
-let me = null, zones = [], filter = 'all', posts = [];
+const CONDITIONS = ['새것','거의 새것','사용감 있음','고장·부품용'];
+const HELP_FIELDS = ['이사·짐 옮기기','라이드·공항','아이 돌봄','집 수리·조립','청소·정리','통역·서류 도움','반려동물','요리·음식','과외·레슨','기타'];
+const REWARDS = {free:'무료 (호의)',paid:'사례금 있음',swap:'품앗이·식사 대접'};
+const INFO_TOPICS = ['맛집·카페','병원·약국','학교·육아','구인구직','렌트·부동산','자동차·정비','행사·모임','생활 팁','질문있어요','기타'];
+const PICKUP = {meet:'직접 만나서',porch:'문앞 픽업'};
+const STATUS = {active:'',reserved:'예약중',done:'완료'};
+let me=null, zones=[], filter='all', sub='', posts=[], counts={};
 
 const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
 const esc = s => (s ?? '').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2600)}
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t._h);t._h=setTimeout(()=>t.style.display='none',2800)}
 function ago(d){const s=(Date.now()-new Date(d))/1000;if(s<60)return'방금';if(s<3600)return Math.floor(s/60)+'분 전';if(s<86400)return Math.floor(s/3600)+'시간 전';return Math.floor(s/86400)+'일 전'}
-function money(p){return p==null?'':(p===0?'무료':'$'+Number(p).toLocaleString())}
-function priceText(p){return p.category==='free'?'무료':(p.category==='sale'?money(p.price):'')}
-function openSheet(html){$('#panel').innerHTML=html;$('#sheet').classList.add('on')}
+function money(p){return p==null?'':'$'+Number(p).toLocaleString()}
+function imgs(p){return (p.images&&p.images.length)?p.images:(p.image_url?[p.image_url]:[])}
+function dateKo(d){if(!d)return'';const x=new Date(d+'T12:00:00');return (x.getMonth()+1)+'/'+x.getDate()+' ('+'일월화수목금토'[x.getDay()]+')'}
+function openSheet(html){$('#panel').innerHTML=html;$('#sheet').classList.add('on');$('#panel').scrollTop=0}
 function closeSheet(){$('#sheet').classList.remove('on')}
 $('#sheet').addEventListener('click',e=>{if(e.target.id==='sheet')closeSheet()});
+function segHTML(id,opts,val,cls=''){return `<div class="seg ${cls}" id="${id}">${Object.entries(opts).map(([k,v])=>`<button type="button" data-v="${esc(k)}" class="${k===val?'on':''}">${v}</button>`).join('')}</div>`}
+function bindSeg(id,cb){const el=$('#'+id);if(!el)return;el.onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;el.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));cb&&cb(b.dataset.v)}}
+function segVal(id){return $('#'+id+' button.on')?.dataset.v||null}
+function chipsHTML(id,list,val){return `<div class="chipgrid" id="${id}">${list.map(v=>`<button type="button" class="chip ${v===val?'on':''}" data-v="${esc(v)}">${esc(v)}</button>`).join('')}</div>`}
+function bindChips(id){const el=$('#'+id);el.onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;const was=b.classList.contains('on');el.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));if(!was)b.classList.add('on')}}
+function chipVal(id){return $('#'+id+' .chip.on')?.dataset.v||null}
 
 async function boot(){
   const {data:{session}} = await sb.auth.getSession();
@@ -126,74 +184,172 @@ async function home(){
         <button class="tab" data-f="all">전체</button>
         ${Object.entries(CATS).map(([k,v])=>`<button class="tab" data-f="${k}">${v.e} ${v.n}</button>`).join('')}
       </div>
+      <div class="chips" id="subChips"></div>
     </header>
     <div class="wrap"><div id="list"><div class="empty">불러오는 중...</div></div></div>
     <button class="fab" id="fab">＋ 글쓰기</button>`;
-  $('#tabs').onclick=e=>{const f=e.target.closest('[data-f]');if(!f)return;filter=f.dataset.f;renderList()};
-  $('#fab').onclick=writeSheet;
-  $('#mineBtn').onclick=()=>{filter=filter==='mine'?'all':'mine';renderList()};
+  $('#tabs').onclick=e=>{const f=e.target.closest('[data-f]');if(!f)return;filter=f.dataset.f;sub='';renderList()};
+  $('#subChips').onclick=e=>{const c=e.target.closest('[data-s]');if(!c)return;sub=sub===c.dataset.s?'':c.dataset.s;renderList()};
+  $('#fab').onclick=()=>pickCategory();
+  $('#mineBtn').onclick=()=>{filter=filter==='mine'?'all':'mine';sub='';renderList()};
   if(!zones.length){const {data}=await sb.from('safe_zones').select('*').order('id');zones=data||[]}
   await loadPosts();
 }
 
 async function loadPosts(){
-  const {data,error}=await sb.from('posts').select('*, profiles(nickname)').order('created_at',{ascending:false}).limit(200);
+  const [{data,error},cc]=await Promise.all([
+    sb.from('posts').select('*, profiles(nickname)').order('created_at',{ascending:false}).limit(300),
+    sb.from('post_comment_counts').select('*')]);
   if(error)return toast('불러오기 오류: '+error.message);
-  posts=data;renderList();
+  posts=data;counts={};(cc.data||[]).forEach(r=>counts[r.post_id]=r.n);renderList();
+}
+
+function subOptions(){
+  if(filter==='help')return {need:'🙋 도와주세요',offer:'💪 도와드려요'};
+  if(filter==='info')return Object.fromEntries(INFO_TOPICS.map(t=>[t,t]));
+  if(filter==='sale')return {active:'판매중만'};
+  if(filter==='free')return {active:'나눔중만'};
+  return null;
+}
+function matchSub(p){
+  if(!sub)return true;
+  if(filter==='help')return p.help_type===sub;
+  if(filter==='info')return p.info_topic===sub;
+  if(sub==='active')return p.status==='active';
+  return true;
+}
+
+function cardLine(p){
+  const st=STATUS[p.status]?`<span class="badge gray">${STATUS[p.status]}</span>`:'';
+  if(p.category==='sale')return st+(p.price!=null?money(p.price):'가격 문의')+(p.negotiable?' <span class="small">· 제안 가능</span>':'');
+  if(p.category==='free')return st+'<span class="badge green">무료나눔</span>'+(p.deadline?`<span class="small">${dateKo(p.deadline)}까지</span>`:'');
+  if(p.category==='help')return st+(p.help_type==='offer'?'<span class="badge blue">도와드려요</span>':'<span class="badge">도와주세요</span>')
+    +`<span class="small">${p.reward_type==='paid'?(p.reward_amount?money(p.reward_amount):'사례금'):(REWARDS[p.reward_type]||'')}</span>`;
+  if(p.category==='info')return `<span class="badge gray">${esc(p.info_topic||'생활정보')}</span>`;
+  return '';
 }
 
 function renderList(){
-  document.querySelectorAll('#tabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.f===filter));
+  $$('#tabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.f===filter));
   $('#mineBtn').classList.toggle('on',filter==='mine');
-  const list=posts.filter(p=>filter==='all'||(filter==='mine'?p.user_id===me.id:p.category===filter));
-  $('#list').innerHTML=list.length?list.map(p=>`<div class="post" data-id="${p.id}">
-      ${p.image_url?`<img class="thumb" src="${esc(p.image_url)}" loading="lazy" alt="">`:`<div class="thumb">${CATS[p.category].e}</div>`}
-      <div style="min-width:0">
+  const so=subOptions();
+  $('#subChips').innerHTML=so?Object.entries(so).map(([k,v])=>`<button class="chip ${sub===k?'on':''}" data-s="${esc(k)}">${esc(v)}</button>`).join(''):'';
+  $('#subChips').style.display=so?'flex':'none';
+  const list=posts.filter(p=>(filter==='all'||(filter==='mine'?p.user_id===me.id:p.category===filter))&&matchSub(p));
+  $('#list').innerHTML=list.length?list.map(p=>{const im=imgs(p);const c=counts[p.id];return `<div class="post" data-id="${p.id}">
+      <div class="thumb">${im.length?`<img src="${esc(im[0])}" loading="lazy" alt="">${im.length>1?`<span class="cnt">${im.length}</span>`:''}`:CATS[p.category].e}</div>
+      <div style="min-width:0;flex:1">
         <h3>${esc(p.title)}</h3>
-        <div class="meta">${CATS[p.category].n}${p.area?' · '+esc(p.area):''} · ${ago(p.created_at)}</div>
-        <div class="price">${STATUS[p.status]?`<span class="badge gray">${STATUS[p.status]}</span>`:''}${priceText(p)}</div>
-      </div></div>`).join(''):`<div class="empty">아직 글이 없어요.<br>첫 글을 올려보세요!</div>`;
-  document.querySelectorAll('.post').forEach(el=>el.onclick=()=>detail(el.dataset.id));
+        <div class="meta">${CATS[p.category].n}${p.area?' · '+esc(p.area):''} · ${ago(p.created_at)}${c?` · 💬 ${c}`:''}</div>
+        <div class="price">${cardLine(p)}</div>
+      </div></div>`}).join(''):`<div class="empty">아직 글이 없어요.<br>첫 글을 올려보세요!</div>`;
+  $$('.post').forEach(el=>el.onclick=()=>detail(el.dataset.id));
 }
 
-function detail(id){
+// ---------- 사진 보기 ----------
+function galleryHTML(list){
+  if(!list.length)return '';
+  return `<div class="gallery"><div class="gtrack" id="gtrack">${list.map((u,i)=>`<img src="${esc(u)}" data-i="${i}" alt="">`).join('')}</div>
+    ${list.length>1?`<span class="gcount" id="gcount">1 / ${list.length}</span>`:''}</div>`;
+}
+function bindGallery(list){
+  const tr=$('#gtrack');if(!tr)return;
+  tr.onscroll=()=>{const i=Math.round(tr.scrollLeft/tr.clientWidth);const c=$('#gcount');if(c)c.textContent=(i+1)+' / '+list.length};
+  tr.onclick=e=>{const im=e.target.closest('img');if(im)openViewer(list,+im.dataset.i)};
+}
+function openViewer(list,start){
+  const v=$('#viewer');
+  v.innerHTML=`<button class="vx" id="vx">✕</button><div class="gtrack" id="vtrack">${list.map(u=>`<img src="${esc(u)}" alt="">`).join('')}</div>${list.length>1?`<span class="gcount" id="vcount">${start+1} / ${list.length}</span>`:''}`;
+  v.classList.add('on');
+  const tr=$('#vtrack');requestAnimationFrame(()=>tr.scrollLeft=start*tr.clientWidth);
+  tr.onscroll=()=>{const c=$('#vcount');if(c)c.textContent=(Math.round(tr.scrollLeft/tr.clientWidth)+1)+' / '+list.length};
+  $('#vx').onclick=()=>v.classList.remove('on');
+}
+
+// ---------- 상세 ----------
+function factsHTML(p){
+  const rows=[];const zone=zones.find(z=>z.id===p.safe_zone_id);
+  if(p.category==='sale'){
+    rows.push(['가격',p.price!=null?money(p.price)+(p.negotiable?' (가격 제안 가능)':''):'가격 문의']);
+    if(p.condition)rows.push(['상태',p.condition]);
+    if(p.price_note)rows.push(['AI 추천가 근거',p.price_note]);
+  }
+  if(p.category==='free'){
+    if(p.condition)rows.push(['상태',p.condition]);
+    if(p.pickup)rows.push(['받는 방법',PICKUP[p.pickup]||p.pickup]);
+    if(p.deadline)rows.push(['나눔 마감',dateKo(p.deadline)]);
+  }
+  if(p.category==='help'){
+    rows.push(['유형',p.help_type==='offer'?'💪 도와드려요':'🙋 도와주세요']);
+    if(p.help_field)rows.push(['분야',p.help_field]);
+    if(p.when_text)rows.push(['언제',p.when_text]);
+    if(p.duration_text)rows.push(['예상 시간',p.duration_text]);
+    if(p.reward_type)rows.push(['보수',p.reward_type==='paid'?(p.reward_amount?money(p.reward_amount):'사례금 있음'):REWARDS[p.reward_type]]);
+  }
+  if(p.category==='info'){
+    if(p.info_topic)rows.push(['주제',p.info_topic]);
+    if(p.place)rows.push(['장소·가게',p.place]);
+  }
+  if(p.area)rows.push(['동네',p.area]);
+  if(zone)rows.push(['🛡️ 안전 거래 장소',zone.name]);
+  return rows.length?`<div class="facts">${rows.map(([a,b])=>`<div><span>${esc(a)}</span><span>${esc(b)}</span></div>`).join('')}</div>`:'';
+}
+
+async function detail(id){
   const p=posts.find(x=>x.id===id);if(!p)return;
-  const mine=p.user_id===me.id, zone=zones.find(z=>z.id===p.safe_zone_id);
+  const mine=p.user_id===me.id, im=imgs(p);
   let contact='';
   if(!mine&&p.contact_value){
     contact=p.contact_type==='kakao'
       ?`<a class="btn" href="${esc(p.contact_value)}" target="_blank" rel="noopener">카카오톡 오픈채팅으로 연락</a>`
       :`<a class="btn" href="sms:${esc(p.contact_value.replace(/[^0-9+]/g,''))}">문자로 연락하기</a>`;
   }
+  const statusLabels=p.category==='sale'?{active:'판매중',reserved:'예약중',done:'판매완료'}:p.category==='free'?{active:'나눔중',reserved:'예약중',done:'나눔완료'}:p.category==='help'?{active:'구하는 중',reserved:'진행중',done:'완료'}:null;
   openSheet(`<button class="close" onclick="closeSheet()">✕</button>
     <span class="badge">${CATS[p.category].n}</span>${STATUS[p.status]?`<span class="badge gray">${STATUS[p.status]}</span>`:''}
     <h2 style="margin-top:8px">${esc(p.title)}</h2>
-    <div class="meta">${esc(p.profiles?.nickname||'')}${p.area?' · '+esc(p.area):''} · ${ago(p.created_at)}</div>
-    ${p.image_url?`<img class="detail-img" src="${esc(p.image_url)}" alt="">`:''}
-    <div class="price" style="font-size:20px">${priceText(p)}</div>
+    <div class="meta">${esc(p.profiles?.nickname||'')} · ${ago(p.created_at)}</div>
+    ${galleryHTML(im)}
+    ${factsHTML(p)}
     <p style="white-space:pre-wrap;margin:12px 0">${esc(p.description||'')}</p>
-    ${zone?`<p class="small">🛡️ 안전 거래 장소: ${esc(zone.name)}</p>`:''}
-    <div style="height:16px"></div>
+    ${p.link?`<p><a href="${esc(p.link)}" target="_blank" rel="noopener" style="color:var(--blue);word-break:break-all">🔗 ${esc(p.link)}</a></p>`:''}
+    <div style="height:12px"></div>
     ${contact}
-    ${mine?`<label>거래 상태</label><div class="seg" id="seg">${Object.entries({active:'진행중',reserved:'예약중',done:'완료'}).map(([k,v])=>`<button data-s="${k}" class="${p.status===k?'on':''}">${v}</button>`).join('')}</div>
+    ${mine?`${statusLabels?`<label>상태 바꾸기</label>${segHTML('stSeg',statusLabels,p.status)}`:''}
       <div style="height:12px"></div><button class="btn ghost" id="delBtn">글 삭제</button>`
-     :`<div style="height:10px"></div><button class="btn ghost" id="reviewBtn">거래 후기 보기·남기기</button>
-      <div class="links"><button id="reportBtn">신고하기</button><button id="blockBtn">이 사람 차단</button></div>`}`);
+     :`${p.category!=='info'?`<div style="height:10px"></div><button class="btn ghost" id="reviewBtn">${esc(p.profiles?.nickname||'')}님 후기 보기·남기기</button>`:''}
+      <div class="links"><button id="reportBtn">신고하기</button><button id="blockBtn">이 사람 차단</button></div>`}
+    <h4>💬 댓글</h4><div id="cmts"><p class="small">불러오는 중...</p></div>
+    <div class="row" style="margin-top:10px"><input id="cin" maxlength="500" placeholder="${p.category==='info'?'정보 더하기, 질문하기':'궁금한 점을 물어보세요'}"><button class="btn" id="csend" style="width:auto;padding:12px 16px">등록</button></div>`);
+  bindGallery(im);
   if(mine){
-    $('#seg').onclick=async e=>{const b=e.target.closest('[data-s]');if(!b)return;
-      const {error}=await sb.from('posts').update({status:b.dataset.s}).eq('id',p.id);
-      if(error)return toast(error.message);p.status=b.dataset.s;renderList();detail(p.id)};
+    bindSeg('stSeg',async v=>{const {error}=await sb.from('posts').update({status:v}).eq('id',p.id);
+      if(error)return toast(error.message);p.status=v;renderList();toast('상태를 바꿨어요')});
     $('#delBtn').onclick=async()=>{if(!confirm('이 글을 삭제할까요? 되돌릴 수 없어요.'))return;
       const {error}=await sb.from('posts').delete().eq('id',p.id);if(error)return toast(error.message);
       posts=posts.filter(x=>x.id!==p.id);closeSheet();renderList();toast('삭제했어요')};
   }else{
     $('#reportBtn').onclick=async()=>{const r=prompt('신고 사유를 적어주세요 (예: 사기 의심, 부적절한 글)');if(!r)return;
       const {error}=await sb.from('reports').insert({post_id:p.id,reason:r});toast(error?error.message:'신고가 접수됐어요')};
-    $('#blockBtn').onclick=async()=>{if(!confirm('이 사람의 글이 더 이상 보이지 않게 할까요?'))return;
+    $('#blockBtn').onclick=async()=>{if(!confirm('이 사람의 글과 댓글이 더 이상 보이지 않게 할까요?'))return;
       const {error}=await sb.from('blocks').insert({blocked_id:p.user_id});if(error)return toast(error.message);
       closeSheet();await loadPosts();toast('차단했어요')};
-    $('#reviewBtn').onclick=()=>reviewSheet(p);
+    const rb=$('#reviewBtn');if(rb)rb.onclick=()=>reviewSheet(p);
   }
+  $('#csend').onclick=async()=>{const body=$('#cin').value.trim();if(!body)return;
+    const b=$('#csend');b.disabled=true;
+    const {error}=await sb.from('comments').insert({post_id:p.id,body});b.disabled=false;
+    if(error)return toast(error.message);$('#cin').value='';counts[p.id]=(counts[p.id]||0)+1;loadComments(p.id);renderList()};
+  loadComments(p.id);
+}
+
+async function loadComments(postId){
+  const {data,error}=await sb.from('comments').select('id,body,created_at,user_id,profiles(nickname)').eq('post_id',postId).order('created_at');
+  const box=$('#cmts');if(!box)return;
+  if(error){box.innerHTML=`<p class="small">${esc(error.message)}</p>`;return}
+  box.innerHTML=data.length?data.map(c=>`<div class="cmt"><b>${esc(c.profiles?.nickname||'')}</b> <span class="small">${ago(c.created_at)}</span>
+    ${c.user_id===me.id?`<button class="small" data-del="${c.id}" style="float:right">삭제</button>`:''}<div style="white-space:pre-wrap">${esc(c.body)}</div></div>`).join(''):'<p class="small">첫 댓글을 남겨보세요.</p>';
+  box.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{await sb.from('comments').delete().eq('id',b.dataset.del);counts[postId]=Math.max(0,(counts[postId]||1)-1);loadComments(postId);renderList()});
 }
 
 async function reviewSheet(p){
@@ -203,66 +359,166 @@ async function reviewSheet(p){
     <h2>${esc(p.profiles?.nickname||'')}님 후기</h2>
     <p class="meta">${avg?`⭐ ${avg} · 후기 ${data.length}개`:'아직 받은 후기가 없어요'}</p>
     ${(data||[]).slice(0,5).map(r=>`<p style="margin-top:8px">${'⭐'.repeat(r.rating)} <span class="small">${ago(r.created_at)}</span><br>${esc(r.comment||'')}</p>`).join('')}
-    <label>별점</label><div class="seg" id="stars">${[1,2,3,4,5].map(n=>`<button data-n="${n}" class="${n===5?'on':''}">${n}</button>`).join('')}</div>
+    <label>별점</label>${segHTML('stars',{1:'1',2:'2',3:'3',4:'4',5:'5'},'5')}
     <label>한 줄 후기</label><input id="rc" placeholder="예: 시간 약속 잘 지키셨어요">
     <div style="height:16px"></div><button class="btn" id="rsave">후기 남기기</button>`);
-  let n=5;$('#stars').onclick=e=>{const b=e.target.closest('[data-n]');if(!b)return;n=+b.dataset.n;document.querySelectorAll('#stars button').forEach(x=>x.classList.toggle('on',x===b))};
-  $('#rsave').onclick=async()=>{const {error}=await sb.from('reviews').insert({post_id:p.id,target_id:p.user_id,rating:n,comment:$('#rc').value.trim()||null});
+  bindSeg('stars');
+  $('#rsave').onclick=async()=>{const {error}=await sb.from('reviews').insert({post_id:p.id,target_id:p.user_id,rating:+segVal('stars'),comment:$('#rc').value.trim()||null});
     if(error)return toast(error.message);closeSheet();toast('후기를 남겼어요')};
 }
 
-function writeSheet(){
-  let file=null, cat='sale';
-  openSheet(`<button class="close" onclick="closeSheet()">✕</button><h2>글쓰기</h2>
-    <label>사진</label>
-    <div class="photo-pick" id="pick">📷 사진 한 장 선택하기</div>
-    <input type="file" accept="image/*" id="file" hidden>
-    <p class="small" style="margin-top:6px">✨ 사진으로 제목·설명·가격 자동 작성은 곧 추가돼요</p>
-    <label>종류</label>
-    <div class="seg" id="cat">${Object.entries(CATS).map(([k,v],i)=>`<button data-c="${k}" class="${i===0?'on':''}">${v.n}</button>`).join('')}</div>
-    <label>제목</label><input id="t" maxlength="80" placeholder="예: 아기 카시트 팝니다">
-    <div id="priceBox"><label>가격 ($)</label><input id="pr" type="number" min="0" inputmode="numeric" placeholder="예: 40"></div>
-    <label>설명</label><textarea id="d" placeholder="상태, 사용 기간, 거래 가능한 시간 등"></textarea>
-    <label>동네</label><input id="ar" value="${esc(me.area||'')}" placeholder="예: 둘루스">
-    <label>안전 거래 장소 (선택)</label>
-    <select id="z"><option value="">선택 안 함</option>${zones.map(z=>`<option value="${z.id}">${esc(z.name)}</option>`).join('')}</select>
-    <label>연락 방법</label>
-    <div class="row"><select id="ct" style="flex:0 0 40%"><option value="sms">문자</option><option value="kakao">카톡 오픈채팅</option></select>
-    <input id="cv" placeholder="전화번호"></div>
-    <div style="height:20px"></div><button class="btn" id="save">올리기</button>`);
-  $('#pick').onclick=()=>$('#file').click();
-  $('#file').onchange=e=>{file=e.target.files[0];if(!file)return;$('#pick').innerHTML=`<img src="${URL.createObjectURL(file)}" alt="">`};
-  $('#cat').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;cat=b.dataset.c;
-    document.querySelectorAll('#cat button').forEach(x=>x.classList.toggle('on',x===b));$('#priceBox').style.display=cat==='sale'?'':'none'};
-  $('#ct').onchange=()=>$('#cv').placeholder=$('#ct').value==='kakao'?'https://open.kakao.com/o/...':'전화번호';
-  $('#save').onclick=async()=>{
-    const title=$('#t').value.trim();if(!title)return toast('제목을 입력해 주세요');
-    const ct=$('#ct').value, cv=$('#cv').value.trim();
-    if(ct==='kakao'&&cv&&!/^https:\/\/open\.kakao\.com\//.test(cv))return toast('오픈채팅 링크는 https://open.kakao.com/ 으로 시작해야 해요');
-    const b=$('#save');b.disabled=true;b.textContent='올리는 중...';
-    const reset=()=>{b.disabled=false;b.textContent='올리기'};
-    let image_url=null;
-    if(file){
-      const blob=await shrink(file);
-      const path=`${me.id}/${Date.now()}.jpg`;
-      const up=await sb.storage.from('post-images').upload(path,blob,{contentType:'image/jpeg'});
-      if(up.error){reset();return toast('사진 업로드 오류: '+up.error.message)}
-      image_url=sb.storage.from('post-images').getPublicUrl(path).data.publicUrl;
-    }
-    const row={category:cat,title,description:$('#d').value.trim()||null,area:$('#ar').value.trim()||null,
-      price:cat==='sale'&&$('#pr').value!==''?parseInt($('#pr').value):null,
-      safe_zone_id:$('#z').value?+$('#z').value:null,contact_type:cv?ct:null,contact_value:cv||null,image_url};
-    const {error}=await sb.from('posts').insert(row);
-    if(error){reset();return toast('오류: '+error.message)}
-    closeSheet();filter='all';await loadPosts();toast('글을 올렸어요');
-  };
+// ---------- 글쓰기 ----------
+function pickCategory(){
+  openSheet(`<button class="close" onclick="closeSheet()">✕</button><h2>어떤 글을 쓸까요?</h2>
+    <div style="display:grid;gap:10px;margin-top:16px">
+      <button class="btn ghost" style="text-align:left" data-c="sale">🛍️ <b>중고거래</b><br><span class="small">사진 찍으면 AI가 제목·설명·가격까지 정해줘요</span></button>
+      <button class="btn ghost" style="text-align:left" data-c="free">🎁 <b>나눔</b><br><span class="small">안 쓰는 물건을 무료로 나눠요</span></button>
+      <button class="btn ghost" style="text-align:left" data-c="help">🤝 <b>품앗이</b><br><span class="small">도움이 필요하거나, 도와줄 수 있을 때</span></button>
+      <button class="btn ghost" style="text-align:left" data-c="info">📌 <b>생활정보</b><br><span class="small">맛집, 병원, 학교, 구인구직, 렌트, 행사, 질문</span></button>
+    </div>`);
+  $$('#panel [data-c]').forEach(b=>b.onclick=()=>writeSheet(b.dataset.c));
 }
 
-// 사진을 1280px 이하 JPEG로 줄여서 저장 용량 절약
-function shrink(file){return new Promise(res=>{const img=new Image();img.onload=()=>{
-  const m=1280,s=Math.min(1,m/Math.max(img.width,img.height));const c=document.createElement('canvas');
+let photos=[], aiRan=false;
+function photoBlockHTML(cat){
+  const ai=cat==='sale'||cat==='free';
+  return `<label>사진 <span class="small">(최대 ${MAX_PHOTOS}장, 첫 장이 대표 사진)</span></label>
+    <div class="photo-btns"><button type="button" id="camBtn">📷 사진 찍기</button><button type="button" id="albBtn">🖼️ 앨범에서 선택</button></div>
+    <div class="strip" id="strip"></div>
+    ${ai?`<div style="height:10px"></div><button type="button" class="btn ai" id="aiBtn" disabled>✨ AI로 ${cat==='sale'?'제목·설명·가격':'제목·설명'} 자동 작성</button>
+      <div class="aibox" id="aibox"></div>`:''}`;
+}
+function renderStrip(){
+  const s=$('#strip');if(!s)return;
+  s.innerHTML=photos.map((p,i)=>`<div class="ph"><img src="${p.url}" alt=""><button type="button" class="x" data-x="${i}">✕</button>${i===0?'<span class="main">대표</span>':''}</div>`).join('');
+  s.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{photos.splice(+b.dataset.x,1);renderStrip()});
+  const ai=$('#aiBtn');if(ai)ai.disabled=!photos.length;
+}
+async function addFiles(files,cat){
+  const room=MAX_PHOTOS-photos.length;
+  if(room<=0)return toast(`사진은 ${MAX_PHOTOS}장까지 올릴 수 있어요`);
+  const list=[...files].slice(0,room);
+  for(const f of list){const blob=await shrink(f,1280,0.82);photos.push({blob,url:URL.createObjectURL(blob)})}
+  renderStrip();
+  if((cat==='sale'||cat==='free')&&!aiRan&&!$('#t').value.trim())runAI(cat);
+}
+function blobToB64(blob){return new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result.split(',')[1]);fr.readAsDataURL(blob)})}
+async function runAI(cat){
+  if(!photos.length)return;
+  aiRan=true;
+  const btn=$('#aiBtn'),box=$('#aibox');btn.disabled=true;btn.textContent='✨ 사진 분석 중... (10초 정도)';
+  box.style.display='block';box.textContent='AI가 사진을 보고 있어요...';
+  try{
+    const images=[];for(const p of photos.slice(0,4))images.push(await blobToB64(await shrink(p.blob,768,0.75)));
+    const {data,error}=await sb.functions.invoke('analyze-item',{body:{images,category:cat}});
+    if(error){let msg=error.message;try{const j=await error.context.json();msg=j.error||msg}catch(e){}
+      box.textContent=msg==='no_key'?'AI 기능은 아직 준비 중이에요. 직접 입력해 주세요.':'AI 분석이 안 됐어요: '+msg;return}
+    if(data.title)$('#t').value=data.title;
+    if(data.description)$('#d').value=data.description;
+    if(data.condition&&CONDITIONS.includes(data.condition))$$('#condSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===data.condition));
+    if(cat==='sale'&&data.price!=null){$('#pr').value=data.price;$('#pnote').value=data.price_reason||''}
+    box.innerHTML=cat==='sale'&&data.price!=null
+      ?`✅ 자동 작성했어요. 추천가 <b>${money(data.price)}</b>${data.price_low!=null?` (보통 ${money(data.price_low)}~${money(data.price_high)})`:''}<br>${esc(data.price_reason||'')}<br><span class="small">내용과 가격은 자유롭게 고치세요.</span>`
+      :'✅ 자동 작성했어요. 내용은 자유롭게 고치세요.';
+  }catch(e){box.textContent='AI 분석 오류: '+e.message}
+  finally{btn.disabled=false;btn.textContent='✨ 다시 분석하기'}
+}
+
+function contactHTML(){return `<label>연락 방법</label>
+    <div class="row"><select id="ct" style="flex:0 0 40%"><option value="sms">문자</option><option value="kakao">카톡 오픈채팅</option></select>
+    <input id="cv" placeholder="전화번호" inputmode="tel"></div>`}
+function areaZoneHTML(withZone){return `<label>동네</label><input id="ar" value="${esc(me.area||'')}" placeholder="예: 둘루스">
+  ${withZone?`<label>안전 거래 장소 (선택)</label><select id="z"><option value="">선택 안 함</option>${zones.map(z=>`<option value="${z.id}">${esc(z.name)}</option>`).join('')}</select>`:''}`}
+
+function formHTML(cat){
+  if(cat==='sale')return `${photoBlockHTML(cat)}
+    <label>제목</label><input id="t" maxlength="80" placeholder="예: 그라코 아기 카시트">
+    <label>상태</label>${segHTML('condSeg',Object.fromEntries(CONDITIONS.map(c=>[c,c])),'사용감 있음')}
+    <label>가격 ($)</label><input id="pr" type="number" min="0" inputmode="numeric" placeholder="사진을 올리면 AI가 추천해요">
+    <input type="hidden" id="pnote">
+    <label class="check"><input type="checkbox" id="neg"> 가격 제안 받기</label>
+    <label>설명</label><textarea id="d" placeholder="브랜드, 사용 기간, 구성품, 하자 등"></textarea>
+    ${areaZoneHTML(true)}${contactHTML()}`;
+  if(cat==='free')return `${photoBlockHTML(cat)}
+    <label>제목</label><input id="t" maxlength="80" placeholder="예: 아이 옷 한 박스 나눔해요">
+    <label>상태</label>${segHTML('condSeg',Object.fromEntries(CONDITIONS.map(c=>[c,c])),'사용감 있음')}
+    <label>받는 방법</label>${segHTML('pickSeg',PICKUP,'meet')}
+    <label>나눔 마감일 (선택)</label><input id="dl" type="date">
+    <label>설명</label><textarea id="d" placeholder="어떤 물건인지, 받으러 올 수 있는 시간 등"></textarea>
+    ${areaZoneHTML(true)}${contactHTML()}`;
+  if(cat==='help')return `<label>어떤 글인가요?</label>${segHTML('htSeg',{need:'🙋 도와주세요',offer:'💪 도와드려요'},'need','big-seg')}
+    <label>분야</label>${chipsHTML('hfChips',HELP_FIELDS,null)}
+    <label>제목</label><input id="t" maxlength="80" placeholder="예: 토요일 이사 짐 옮길 분 구해요">
+    <label>자세한 내용</label><textarea id="d" placeholder="무엇을, 어디서, 몇 명이 필요한지 등"></textarea>
+    <label>언제</label><input id="wh" placeholder="예: 11/30 (토) 오전 10시 / 평일 저녁 아무 때나">
+    <label>예상 시간 (선택)</label><input id="du" placeholder="예: 2~3시간">
+    <label id="rwLabel">사례</label>${segHTML('rwSeg',REWARDS,'swap')}
+    <div id="amtBox" style="display:none"><label>금액 ($)</label><input id="amt" type="number" min="0" inputmode="numeric" placeholder="예: 50"></div>
+    ${photoBlockHTML(cat)}
+    ${areaZoneHTML(false)}${contactHTML()}`;
+  return `<label>주제</label>${chipsHTML('itChips',INFO_TOPICS,null)}
+    <label>제목</label><input id="t" maxlength="80" placeholder="예: 둘루스 한인 소아과 추천해요">
+    <label>내용</label><textarea id="d" style="min-height:150px" placeholder="경험, 가격, 영업시간, 팁 등 자유롭게"></textarea>
+    <label>장소·가게 이름 (선택)</label><input id="pl" placeholder="예: OO 소아과, Pleasant Hill Rd">
+    <label>관련 링크 (선택)</label><input id="lk" type="url" placeholder="https://">
+    ${photoBlockHTML(cat)}
+    ${areaZoneHTML(false)}`;
+}
+
+function writeSheet(cat){
+  photos=[];aiRan=false;
+  openSheet(`<button class="close" onclick="closeSheet()">✕</button><h2>${CATS[cat].e} ${CATS[cat].n} 글쓰기</h2>
+    ${formHTML(cat)}<div style="height:22px"></div><button class="btn" id="save">올리기</button>`);
+  $('#camBtn').onclick=()=>{$('#camIn').value='';$('#camIn').click()};
+  $('#albBtn').onclick=()=>{$('#albIn').value='';$('#albIn').click()};
+  $('#camIn').onchange=e=>addFiles(e.target.files,cat);
+  $('#albIn').onchange=e=>addFiles(e.target.files,cat);
+  const ai=$('#aiBtn');if(ai)ai.onclick=()=>runAI(cat);
+  ['condSeg','pickSeg'].forEach(id=>bindSeg(id));
+  bindSeg('htSeg',v=>{$('#rwLabel').textContent=v==='offer'?'받고 싶은 사례':'드릴 사례'});
+  bindSeg('rwSeg',v=>{$('#amtBox').style.display=v==='paid'?'':'none'});
+  if($('#hfChips'))bindChips('hfChips');
+  if($('#itChips'))bindChips('itChips');
+  const ct=$('#ct');if(ct)ct.onchange=()=>{$('#cv').placeholder=ct.value==='kakao'?'https://open.kakao.com/o/...':'전화번호';$('#cv').inputMode=ct.value==='kakao'?'url':'tel'};
+  $('#save').onclick=()=>savePost(cat);
+}
+
+async function savePost(cat){
+  const v=id=>($('#'+id)?.value||'').trim();
+  const title=v('t');if(!title)return toast('제목을 입력해 주세요');
+  if(cat==='info'&&!chipVal('itChips'))return toast('주제를 골라 주세요');
+  if(cat==='help'&&!v('d'))return toast('자세한 내용을 적어 주세요');
+  const ct=v('ct'), cv=v('cv');
+  if(ct==='kakao'&&cv&&!/^https:\/\/open\.kakao\.com\//.test(cv))return toast('오픈채팅 링크는 https://open.kakao.com/ 으로 시작해야 해요');
+  const lk=v('lk');if(lk&&!/^https?:\/\//.test(lk))return toast('링크는 https:// 로 시작해야 해요');
+  const b=$('#save');b.disabled=true;
+  const reset=()=>{b.disabled=false;b.textContent='올리기'};
+  const urls=[];
+  for(let i=0;i<photos.length;i++){
+    b.textContent=`사진 올리는 중 ${i+1}/${photos.length}`;
+    const path=`${me.id}/${Date.now()}_${i}.jpg`;
+    const up=await sb.storage.from('post-images').upload(path,photos[i].blob,{contentType:'image/jpeg'});
+    if(up.error){reset();return toast('사진 업로드 오류: '+up.error.message)}
+    urls.push(sb.storage.from('post-images').getPublicUrl(path).data.publicUrl);
+  }
+  b.textContent='올리는 중...';
+  const row={category:cat,title,description:v('d')||null,area:v('ar')||null,images:urls,image_url:urls[0]||null,
+    contact_type:cv?ct:null,contact_value:cv||null,safe_zone_id:v('z')?+v('z'):null};
+  if(cat==='sale')Object.assign(row,{price:v('pr')!==''?parseInt(v('pr')):null,negotiable:$('#neg').checked,condition:segVal('condSeg'),price_note:v('pnote')||null});
+  if(cat==='free')Object.assign(row,{condition:segVal('condSeg'),pickup:segVal('pickSeg'),deadline:v('dl')||null});
+  if(cat==='help')Object.assign(row,{help_type:segVal('htSeg'),help_field:chipVal('hfChips'),when_text:v('wh')||null,duration_text:v('du')||null,
+    reward_type:segVal('rwSeg'),reward_amount:segVal('rwSeg')==='paid'&&v('amt')!==''?parseInt(v('amt')):null});
+  if(cat==='info')Object.assign(row,{info_topic:chipVal('itChips'),place:v('pl')||null,link:lk||null});
+  const {error}=await sb.from('posts').insert(row);
+  if(error){reset();return toast('오류: '+error.message)}
+  closeSheet();filter=cat;sub='';await loadPosts();toast('글을 올렸어요');
+}
+
+// 사진을 줄여서 저장 용량·업로드 시간 절약
+function shrink(file,max,q){return new Promise(res=>{const img=new Image();img.onload=()=>{
+  const s=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');
   c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-  c.toBlob(b=>res(b||file),'image/jpeg',0.82)};img.onerror=()=>res(file);img.src=URL.createObjectURL(file)})}
+  c.toBlob(b=>res(b||file),'image/jpeg',q)};img.onerror=()=>res(file);img.src=URL.createObjectURL(file)})}
 
 boot().catch(e=>{$('#app').innerHTML=`<div class="empty">연결 오류가 났어요. 잠시 후 새로고침해 주세요.<br><span class="small">${esc(e.message)}</span></div>`});
 </script>
