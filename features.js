@@ -379,7 +379,7 @@ async function renderNoti(){
     const all=box.querySelector('#nAll');if(all)all.onclick=async()=>{await sb.from('notifications').update({read:true}).eq('read',false);renderNoti()};
     box.querySelectorAll('.noti').forEach(b=>b.onclick=async()=>{await sb.from('notifications').update({read:true}).eq('id',b.dataset.id);
       const pid=b.dataset.p;if(!pid)return renderNoti();
-      if(!posts.find(x=>x.id===pid)){const {data:p}=await sb.from('posts').select('*, profiles(nickname,role)').eq('id',pid).maybeSingle();if(!p){toast('삭제됐거나 볼 수 없는 글이에요');return renderNoti()}posts.push(p)}
+      if(!posts.find(x=>x.id===pid)){const {data:p}=await sb.from('posts').select('*, profiles!posts_user_id_fkey(nickname,role)').eq('id',pid).maybeSingle();if(!p){toast('삭제됐거나 볼 수 없는 글이에요');return renderNoti()}posts.push(p)}
       detail(pid);renderNoti()});
   }else{
     const {data}=await sb.from('keyword_alerts').select('*').order('created_at');
