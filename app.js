@@ -177,7 +177,7 @@ function shell(){
 async function load(){
   if(!zones.length){const {data}=await sb.from('safe_zones').select('*').order('id');zones=data||[]}
   const [{data,error},cc]=await Promise.all([
-    sb.from('posts').select('*, profiles(nickname,role)').order('created_at',{ascending:false}).limit(300),
+    sb.from('posts').select('*, profiles!posts_user_id_fkey(nickname,role)').order('created_at',{ascending:false}).limit(300),
     sb.from('post_comment_counts').select('*')]);
   if(error)return toast('글을 불러오지 못했어요. 새로고침해 주세요');
   posts=data;await loadLevels();counts={};(cc.data||[]).forEach(r=>counts[r.post_id]=r.n);renderList();
