@@ -180,7 +180,7 @@ async function load(){
     sb.from('posts').select('*, profiles(nickname,role)').order('created_at',{ascending:false}).limit(300),
     sb.from('post_comment_counts').select('*')]);
   if(error)return toast('글을 불러오지 못했어요. 새로고침해 주세요');
-  posts=data;counts={};(cc.data||[]).forEach(r=>counts[r.post_id]=r.n);renderList();
+  posts=data;await loadLevels();counts={};(cc.data||[]).forEach(r=>counts[r.post_id]=r.n);renderList();
 }
 
 function render(){
@@ -264,7 +264,7 @@ async function renderMe(){
   const mine=posts.filter(p=>p.user_id===me.id);
   $('#view').innerHTML=`<div class="me-head">${avatar(me.nickname,me.id).replace('class="av"','class="av"')}<div><div class="nm">${esc(me.nickname)}</div><div class="m">${esc(me.area||'동네 미설정')}</div></div></div>
     <div class="stats"><div><b>${mine.length}</b><small>내 글</small></div><div><b id="rvAvg">–</b><small>받은 평점</small></div><div><b id="rvN">0</b><small>받은 후기</small></div></div>
-    ${isStaff()?`<button class="adminentry" id="adminBtn"><span><b>${me.role==='master'?'마스터 관리자':'관리자'} 메뉴</b><small>검토할 글, 회원 관리, 초대코드</small></span><span class="cnt" id="adminCnt"></span></button>`:''}
+    ${lvCard()}${isStaff()?`<button class="adminentry" id="adminBtn"><span><b>${me.role==='master'?'마스터 관리자':'관리자'} 메뉴</b><small>검토할 글, 회원 관리, 초대코드</small></span><span class="cnt" id="adminCnt"></span></button>`:''}
     <div class="invite"><div><b>이웃 초대하기</b><small>링크를 보내면 바로 들어올 수 있어요</small></div><button id="invBtn">링크 보내기</button></div>
     <div class="utabs" style="top:56px"><button class="on">내가 쓴 글 ${mine.length}</button></div>
     <div class="list" id="myList">${mine.length?mine.map(p=>p.category==='help'?rowHelp(p):p.category==='info'?rowInfo(p):rowSale(p)).join(''):'<div class="empty"><b>아직 쓴 글이 없어요</b>아래 홈에서 글쓰기를 눌러 시작해 보세요.</div>'}</div>`;
@@ -328,7 +328,7 @@ async function detail(id){
   const el=openPage(`
     ${im.length?`<div class="overlay-bar"><button class="icon-btn" data-back aria-label="뒤로">${I.back}</button></div>${carousel(im)}`
       :`<div class="topbar"><button class="icon-btn" data-back aria-label="뒤로">${I.back}</button><h2>${cat.n}</h2><div style="width:40px"></div></div>`}
-    <div class="author">${avatar(p.profiles?.nickname,p.user_id)}<div><div class="nm">${esc(p.profiles?.nickname||'')}${staffBadge(p.profiles?.role)}</div><div class="ar">${esc(p.area||'')}</div></div>
+    <div class="author">${avatar(p.profiles?.nickname,p.user_id)}<div><div class="nm">${esc(p.profiles?.nickname||'')}${staffBadge(p.profiles?.role)}${lvBadge(p.user_id)}</div><div class="ar">${esc(p.area||'')}</div></div>
       ${p.category!=='info'?`<div class="score" id="score"></div>`:''}</div>
     <div class="content">
       ${p.category==='help'?`<span class="tag ${p.help_type==='offer'?'indigo':'coral'}" style="margin-bottom:10px">${p.help_type==='offer'?'도와드려요':'도와주세요'}</span>`:''}
@@ -378,7 +378,7 @@ async function loadComments(el,postId){
   const box=el.querySelector('#cmts');if(!box)return;
   if(error){box.innerHTML='<p class="m">댓글을 불러오지 못했어요</p>';return}
   el.querySelector('#cN').textContent=data.length||'';
-  box.innerHTML=data.length?data.map(c=>`<div class="cmt">${avatar(c.profiles?.nickname,c.user_id)}<div style="flex:1;min-width:0"><div class="who">${esc(c.profiles?.nickname||'')}${staffBadge(c.profiles?.role)}<span>${ago(c.created_at)}</span></div><div class="tx">${esc(c.body)}</div></div>${c.user_id===me.id||isStaff()?`<button class="del" data-del="${c.id}">삭제</button>`:''}</div>`).join(''):'<p class="m" style="padding:8px 0">아직 댓글이 없어요. 첫 댓글을 남겨보세요.</p>';
+  box.innerHTML=data.length?data.map(c=>`<div class="cmt">${avatar(c.profiles?.nickname,c.user_id)}<div style="flex:1;min-width:0"><div class="who">${esc(c.profiles?.nickname||'')}${staffBadge(c.profiles?.role)}${lvBadge(c.user_id)}<span>${ago(c.created_at)}</span></div><div class="tx">${esc(c.body)}</div></div>${c.user_id===me.id||isStaff()?`<button class="del" data-del="${c.id}">삭제</button>`:''}</div>`).join(''):'<p class="m" style="padding:8px 0">아직 댓글이 없어요. 첫 댓글을 남겨보세요.</p>';
   box.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{await sb.from('comments').delete().eq('id',b.dataset.del);counts[postId]=Math.max(0,(counts[postId]||1)-1);loadComments(el,postId);renderList()});
 }
 
@@ -392,7 +392,7 @@ async function reviewSheet(p){
     <button class="btn block" id="rsave" style="margin-top:16px">후기 남기기</button>`);
   $('#stars').onclick=e=>{const b=e.target.closest('[data-v]');if(!b)return;n=+b.dataset.v;$$('#stars button').forEach(x=>x.classList.toggle('on',x===b))};
   $('#rsave').onclick=async()=>{const {error}=await sb.from('reviews').insert({post_id:p.id,target_id:p.user_id,rating:n,comment:$('#rc').value.trim()||null});
-    if(error)return toast('후기를 남기지 못했어요');closeSheet();toast('후기를 남겼어요')};
+    if(error)return toast(error.message.includes('duplicate')?'이 글에는 이미 후기를 남겼어요':'예약중이거나 완료된 글에만 후기를 남길 수 있어요');closeSheet();loadLevels();toast('후기를 남겼어요')};
 }
 
 // ---------- 글쓰기 ----------
