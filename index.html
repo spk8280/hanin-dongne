@@ -349,7 +349,7 @@ const I={
   mark:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 11 12 4l8 7v9H4z"/><path d="M9.5 15.5c1.4 1.3 3.6 1.3 5 0" stroke-linecap="round"/></svg>'
 };
 
-const CATS={sale:{n:'중고거래',c:'jade',i:'bag'},free:{n:'나눔',c:'peach',i:'gift'},help:{n:'품앗이',c:'indigo',i:'hands'},info:{n:'동네생활',c:'amber',i:'news'}};
+const CATS={sale:{n:'중고거래',c:'jade',i:'bag'},free:{n:'나눔',c:'peach',i:'gift'},help:{n:'품앗이',c:'indigo',i:'hands'},info:{n:'동네소식',c:'amber',i:'news'}};
 const CONDITIONS=['새것','거의 새것','사용감 있음','고장·부품용'];
 const HELP_FIELDS=['이사·짐 옮기기','라이드·공항','아이 돌봄','집 수리·조립','청소·정리','통역·서류','반려동물','요리·음식','과외·레슨','기타'];
 const REWARDS={free:'무료로 도와요',paid:'사례금',swap:'품앗이·식사 대접'};
@@ -398,7 +398,7 @@ function onboarding(){
       <div class="art"><div class="stack">
         <div class="mock c1">${ph('linear-gradient(135deg,#5B2A86,#8E5CC4)',I.bag)}<div><div class="t">다이슨 V11 무선청소기</div><div class="m">둘루스 · 12분 전</div><div class="pr">$200</div></div></div>
         <div class="mock c2">${ph('var(--coral)',I.hands)}<div><div class="t">토요일 이사 도와주실 분</div><div class="m">스와니 · 사례 $80</div><div class="pr" style="color:var(--coral)">도와주세요</div></div></div>
-        <div class="mock c3">${ph('var(--amber)',I.news)}<div><div class="t">한국어 되는 소아과 추천</div><div class="m">존스크릭 · 댓글 12</div><div class="pr" style="color:var(--amber)">동네생활</div></div></div>
+        <div class="mock c3">${ph('var(--amber)',I.news)}<div><div class="t">한국어 되는 소아과 추천</div><div class="m">존스크릭 · 댓글 12</div><div class="pr" style="color:var(--amber)">동네소식</div></div></div>
       </div></div>
       <h2>애틀랜타 한인 이웃,<br>여기 다 모였어요</h2>
       <div class="towns"><span>둘루스</span><span>스와니</span><span>뷰포드</span><span>존스크릭</span><span>로렌스빌</span></div></div>`,
@@ -479,8 +479,8 @@ function shell(){
   <nav class="tabbar" id="tabbar">
     <button data-t="home">${I.home}홈</button>
     <button data-t="help">${I.hands}품앗이</button>
-    <button data-t="info">${I.news}동네생활</button>
-    <button data-t="me">${I.user}나의 동네</button>
+    <button data-t="info">${I.news}동네소식</button>
+    <button data-t="me">${I.user}내 정보</button>
   </nav>`;
   $('#tabbar').onclick=e=>{const b=e.target.closest('[data-t]');if(!b)return;if(tab===b.dataset.t){window.scrollTo({top:0,behavior:'smooth'});return}tab=b.dataset.t;chip='';window.scrollTo(0,0);render()};
   $('#fab').onclick=()=>pickCategory();
@@ -553,7 +553,7 @@ function rowHelp(p){const im=imgs(p);const need=p.help_type!=='offer';
   ${im.length?`<div class="th sm"><img src="${esc(im[0])}" loading="lazy" alt=""></div>`:''}</button>`}
 
 function rowInfo(p){const im=imgs(p);return `<button class="item" data-id="${p.id}">
-  <div class="body"><div><span class="tag amber">${esc(p.info_topic||'동네생활')}</span></div>
+  <div class="body"><div><span class="tag amber">${esc(p.info_topic||'동네소식')}</span></div>
   <div class="t" style="margin-top:8px;font-weight:700">${esc(p.title)}</div>${p.description?`<div class="pv">${esc(p.description)}</div>`:''}
   <div class="m" style="margin-top:8px">${esc(p.profiles?.nickname||'')} · ${esc(where(p))}${counts[p.id]?` · 댓글 ${counts[p.id]}`:''}</div></div>
   ${im.length?`<div class="th sm"><img src="${esc(im[0])}" loading="lazy" alt=""></div>`:''}</button>`}
@@ -573,7 +573,7 @@ function renderList(){
   $$('#list .item').forEach(el=>el.onclick=()=>detail(el.dataset.id));
 }
 
-// ---------- 나의 동네 ----------
+// ---------- 내 정보 ----------
 async function renderMe(){
   const mine=posts.filter(p=>p.user_id===me.id);
   $('#view').innerHTML=`<div class="me-head">${avatar(me.nickname,me.id).replace('class="av"','class="av"')}<div><div class="nm">${esc(me.nickname)}</div><div class="m">${esc(me.area||'동네 미설정')}</div></div></div>
@@ -644,7 +644,7 @@ async function detail(id){
       ${p.category!=='info'?`<div class="score" id="score"></div>`:''}</div>
     <div class="content">
       ${p.category==='help'?`<span class="tag ${p.help_type==='offer'?'indigo':'coral'}" style="margin-bottom:10px">${p.help_type==='offer'?'도와드려요':'도와주세요'}</span>`:''}
-      ${p.category==='info'?`<span class="tag amber" style="margin-bottom:10px">${esc(p.info_topic||'동네생활')}</span>`:''}
+      ${p.category==='info'?`<span class="tag amber" style="margin-bottom:10px">${esc(p.info_topic||'동네소식')}</span>`:''}
       <h3>${statusTag(p)} ${esc(p.title)}</h3>
       <div class="m">${cat.n} · ${ago(p.created_at)}</div>
       ${factsGrid(p)}
