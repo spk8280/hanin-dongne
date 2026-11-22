@@ -119,7 +119,7 @@ async function openRoom(c){
   el.style.overflow='hidden';
   room={id:c.id,el,last:null,seen:new Set()};
   el.querySelector('[data-back]').onclick=back;
-  el.querySelector('#rPost').onclick=async()=>{if(!p.id)return;if(!posts.find(x=>x.id===p.id)){const {data}=await sb.from('posts').select('*, profiles(nickname,role)').eq('id',p.id).maybeSingle();if(!data)return toast('삭제됐거나 볼 수 없는 글이에요');posts.push(data)}detail(p.id)};
+  el.querySelector('#rPost').onclick=async()=>{if(!p.id)return;if(!posts.find(x=>x.id===p.id)){const {data}=await sb.from('posts').select('*, profiles!posts_user_id_fkey(nickname,role)').eq('id',p.id).maybeSingle();if(!data)return toast('삭제됐거나 볼 수 없는 글이에요');posts.push(data)}detail(p.id)};
   const inp=el.querySelector('#mIn'),go=el.querySelector('#mGo');
   inp.oninput=()=>{inp.style.height='auto';inp.style.height=Math.min(110,inp.scrollHeight)+'px'};
   inp.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&window.matchMedia('(pointer:fine)').matches){e.preventDefault();send()}};
