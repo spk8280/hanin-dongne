@@ -16,9 +16,12 @@ document.addEventListener('error',e=>{
 
 // post-images에 사진을 올릴 때마다 썸네일도 같이 올려요
 (function(){
-  const _from=sb.storage.from.bind(sb.storage);
-  sb.storage.from=function(bucket){
-    const b=_from(bucket);if(bucket!=='post-images'||!b||typeof b.upload!=='function')return b;
+  // sb.storage는 부를 때마다 새로 만들어지므로 공통 원형(prototype)에 연결해요
+  const proto=sb.storage&&Object.getPrototypeOf(sb.storage);
+  if(!proto||typeof proto.from!=='function')return;
+  const _from=proto.from;
+  proto.from=function(bucket){
+    const b=_from.call(this,bucket);if(bucket!=='post-images'||!b||typeof b.upload!=='function')return b;
     const _up=b.upload.bind(b);
     b.upload=async function(path,blob,opt){
       const r=await _up(path,blob,opt);
