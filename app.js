@@ -224,7 +224,7 @@ function statusTag(p){
 function countFoot(p){const c=counts[p.id];return c?`<div class="foot"><span>${I.chat}${c}</span></div>`:''}
 
 function rowSale(p){const im=imgs(p);return `<button class="item" data-id="${p.id}">
-  <div class="th">${im.length?`<img src="${esc(im[0])}" loading="lazy" alt="">${im.length>1?`<span class="n">${im.length}</span>`:''}`:I[CATS[p.category].i]}</div>
+  <div class="th">${im.length?`<img src="${esc(thumbUrl(im[0]))}" data-full="${esc(im[0])}" loading="lazy" alt="">${im.length>1?`<span class="n">${im.length}</span>`:''}`:I[CATS[p.category].i]}</div>
   <div class="body"><div class="t">${esc(p.title)}</div><div class="m">${esc(where(p))}</div>
   <div class="p">${statusTag(p)}${p.category==='free'?'<span class="tag peach">나눔</span>':(p.price!=null?money(p.price):'<span style="color:var(--sub);font-weight:500">가격 문의</span>')}</div>
   ${countFoot(p)}</div></button>`}
@@ -236,13 +236,13 @@ function rowHelp(p){const im=imgs(p);const need=p.help_type!=='offer';
   <div class="t">${esc(p.title)}</div>${p.description?`<div class="pv">${esc(p.description)}</div>`:''}
   <div class="info">${p.when_text?`<span>${I.clock}${esc(p.when_text)}</span>`:''}${p.area?`<span>${I.pin}${esc(p.area)}</span>`:''}</div>
   <div class="m" style="display:flex;justify-content:space-between;margin-top:8px"><span style="color:var(--ink);font-weight:700">${esc(rw)}</span><span>${ago(p.created_at)}${counts[p.id]?` · 댓글 ${counts[p.id]}`:''}</span></div></div>
-  ${im.length?`<div class="th sm"><img src="${esc(im[0])}" loading="lazy" alt=""></div>`:''}</button>`}
+  ${im.length?`<div class="th sm"><img src="${esc(thumbUrl(im[0]))}" data-full="${esc(im[0])}" loading="lazy" alt=""></div>`:''}</button>`}
 
 function rowInfo(p){const im=imgs(p);return `<button class="item" data-id="${p.id}">
   <div class="body"><div><span class="tag amber">${esc(p.info_topic||'동네소식')}</span></div>
   <div class="t" style="margin-top:8px;font-weight:700">${esc(p.title)}</div>${p.description?`<div class="pv">${esc(p.description)}</div>`:''}
   <div class="m" style="margin-top:8px">${esc(p.profiles?.nickname||'')} · ${esc(where(p))}${counts[p.id]?` · 댓글 ${counts[p.id]}`:''}</div></div>
-  ${im.length?`<div class="th sm"><img src="${esc(im[0])}" loading="lazy" alt=""></div>`:''}</button>`}
+  ${im.length?`<div class="th sm"><img src="${esc(thumbUrl(im[0]))}" data-full="${esc(im[0])}" loading="lazy" alt=""></div>`:''}</button>`}
 
 function emptyHTML(){
   if(q)return `<div class="empty"><b>'${esc(q)}' 검색 결과가 없어요</b>다른 단어로 찾아보세요.</div>`;
