@@ -435,7 +435,7 @@ async function runAI(cat){
   const box=W.querySelector('#aiBox'),tx=W.querySelector('#aiTx'),ab=W.querySelector('#aiBtn');
   box.classList.add('busy');ab.hidden=true;tx.innerHTML='<b>사진을 보고 있어요</b><br>10초 정도 걸려요';
   try{
-    const images=[];for(const p of photos.slice(0,4))images.push(await b64(await shrink(p.blob,768,0.75)));
+    const images=[];for(const p of photos.slice(0,4))images.push(await b64(p.blob));
     const {data,error}=await sb.functions.invoke('analyze-item',{body:{images,category:cat}});
     if(error){let msg=error.message;try{const j=await error.context.json();msg=j.error||msg}catch(e){}
       tx.innerHTML=msg.includes('하루')?esc(msg):msg==='no_key'?'AI 자동 작성은 곧 열려요. 지금은 직접 입력해 주세요.':'AI가 분석하지 못했어요. 직접 입력하거나 다시 분석해 보세요.';return}
@@ -445,7 +445,7 @@ async function runAI(cat){
     if(cat==='sale'&&data.price!=null){set('pr',data.price);set('pnote',data.price_reason||'')}
     tx.innerHTML=cat==='sale'&&data.price!=null
       ?`AI 추천 가격<span class="big">${money(data.price)}</span>${data.price_low!=null?`보통 ${money(data.price_low)}~${money(data.price_high)}에 거래돼요. `:''}${esc(data.price_reason||'')}`
-      :'<b>제목과 설명을 채웠어요.</b> 필요한 부분만 고쳐주세요.';
+      :'<b>제목과 설명을 채웠어요.</b> 필요한 부분만 고쳐주세요.';if(data.tip&&data.confidence!=='high')tx.innerHTML+=`<br><small style="display:block;margin-top:6px">💡 ${esc(data.tip)} 사진을 더 올리고 다시 분석하면 더 정확해요.</small>`;
   }catch(e){tx.textContent='AI가 분석하지 못했어요. 직접 입력해 주세요.'}
   finally{box.classList.remove('busy');ab.hidden=false}
 }
