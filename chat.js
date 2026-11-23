@@ -91,7 +91,7 @@ async function loadChats(){
     const unread=c.last_sender!==me.id&&new Date(c.last_message_at)>new Date(c.buyer_id===me.id?c.buyer_read_at:c.seller_read_at);
     return `<button class="crow ${unread?'unread':''}" data-id="${c.id}">${avatar(other?.nickname,other?.id)}
       <div class="mid"><div class="nm">${esc(other?.nickname||'알 수 없음')}${lvBadge(other?.id)}<small>${ago(c.last_message_at)}</small></div><div class="lm">${esc(c.last_message||'')}</div></div>
-      ${unread?'<span class="ud"></span>':''}<div class="pt">${im.length?`<img src="${esc(im[0])}" alt="">`:I[CATS[c.post?.category]?.i||'bag']}</div></button>`}).join('');
+      ${unread?'<span class="ud"></span>':''}<div class="pt">${im.length?`<img src="${esc(thumbUrl(im[0]))}" data-full="${esc(im[0])}" alt="">`:I[CATS[c.post?.category]?.i||'bag']}</div></button>`}).join('');
   box.querySelectorAll('.crow').forEach(r=>r.onclick=()=>openRoom(chats.find(c=>c.id===r.dataset.id)));
 }
 
@@ -111,7 +111,7 @@ async function openRoom(c){
   const priceTxt=p.category==='sale'?(p.price!=null?money(p.price):'가격 문의'):p.category==='free'?'무료 나눔':CATS[p.category]?.n||'';
   const el=openPage(`<div class="room">
     <div class="topbar"><button class="icon-btn" data-back aria-label="뒤로">${I.back}</button><h2>${esc(other?.nickname||'')}<small>${lvBadge(other?.id).replace(/<[^>]+>/g,'').trim()||'이웃'}</small></h2><button class="icon-btn" id="rMore" aria-label="더보기">⋯</button></div>
-    <button class="rpost" id="rPost"><div class="pt">${im.length?`<img src="${esc(im[0])}" alt="">`:I[CATS[p.category]?.i||'bag']}</div><div style="min-width:0;flex:1"><div class="tt">${statusTag(p)} ${esc(p.title||'삭제된 글')}</div><div class="pp">${priceTxt}</div></div></button>
+    <button class="rpost" id="rPost"><div class="pt">${im.length?`<img src="${esc(thumbUrl(im[0]))}" data-full="${esc(im[0])}" alt="">`:I[CATS[p.category]?.i||'bag']}</div><div style="min-width:0;flex:1"><div class="tt">${statusTag(p)} ${esc(p.title||'삭제된 글')}</div><div class="pp">${priceTxt}</div></div></button>
     <div class="msgs" id="msgs"><div class="sysmsg">거래는 밝은 공개 장소에서 만나서 하세요. 먼저 돈을 보내달라는 요청은 사기일 수 있어요.</div></div>
     <div class="quick" id="quick">${QUICK[iAmBuyer?'buyer':'seller'].map(q=>`<button>${q}</button>`).join('')}</div>
     <div class="composer"><textarea id="mIn" rows="1" maxlength="1000" placeholder="메시지 보내기"></textarea><button class="go" id="mGo" aria-label="보내기">${I.send}</button></div>
