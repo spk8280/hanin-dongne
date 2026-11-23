@@ -105,12 +105,12 @@ function visible(){
 const _rowSale=rowSale;
 rowSale=function(p){
   if(p.category==='moving'){const m=movingMap[p.id]||{n:0,left:0,min:null};const im=imgs(p);
-    return `<button class="item" data-id="${p.id}"><div class="th">${im.length?`<img src="${esc(im[0])}" loading="lazy" alt="">`:I.box}</div>
+    return `<button class="item" data-id="${p.id}"><div class="th">${im.length?`<img src="${esc(thumbUrl(im[0]))}" data-full="${esc(im[0])}" loading="lazy" alt="">`:I.box}</div>
       <div class="body"><div class="t">${esc(p.title)}</div><div class="m">${esc(where(p))}</div>
       <div class="p">${statusTag(p)}<span class="tag coral">이사정리</span>물건 ${m.n}개${m.n?` <span style="font-weight:500;color:var(--sub);font-size:14px">· ${m.left}개 남음</span>`:''}</div>
       ${p.move_date?`<div class="m">${dateKo(p.move_date)}까지 가져가요</div>`:''}</div></button>`}
   if(p.category==='group'){const g=groupMap[p.id]||{total:0};const goal=p.goal_count||0;const im=imgs(p);
-    return `<button class="item" data-id="${p.id}"><div class="th">${im.length?`<img src="${esc(im[0])}" loading="lazy" alt="">`:I.people}</div>
+    return `<button class="item" data-id="${p.id}"><div class="th">${im.length?`<img src="${esc(thumbUrl(im[0]))}" data-full="${esc(im[0])}" loading="lazy" alt="">`:I.people}</div>
       <div class="body"><div class="t">${esc(p.title)}</div><div class="m">${esc(where(p))}</div>
       <div class="p">${statusTag(p)}<span class="tag indigo">같이 사요</span>${p.unit_price!=null?'1인 '+money(p.unit_price):''}</div>
       <div class="prog"><i style="width:${goal?Math.min(100,g.total/goal*100):0}%"></i></div>
@@ -162,7 +162,7 @@ async function loadMovingDetail(box,p,mine,el){
   const lab={active:'판매중',reserved:'예약중',done:'판매완료'};
   box.innerHTML=`<h4 style="font-size:17px;margin:4px 0 2px">물건 목록 <span style="color:var(--coral)">${left}</span><span class="m"> / ${items.length}개</span></h4>
     <div class="mgrid">${items.map(it=>`<div class="mitem ${it.status==='done'?'done':''}" data-id="${it.id}">
-      <div class="im">${it.image_url?`<img src="${esc(it.image_url)}" loading="lazy" alt="">`:I.box}${it.status!=='active'?`<span class="tag ${it.status==='done'?'gray':'jade'}">${lab[it.status]}</span>`:''}</div>
+      <div class="im">${it.image_url?`<img src="${esc(thumbUrl(it.image_url))}" data-full="${esc(it.image_url)}" loading="lazy" alt="">`:I.box}${it.status!=='active'?`<span class="tag ${it.status==='done'?'gray':'jade'}">${lab[it.status]}</span>`:''}</div>
       <div class="tx"><b>${esc(it.name)}</b><span>${it.price!=null?(it.price===0?'무료':money(it.price)):'가격 문의'}</span>
       ${mine?`<select data-st>${Object.entries(lab).map(([k,v])=>`<option value="${k}" ${it.status===k?'selected':''}>${v}</option>`).join('')}</select>`:(it.status==='done'?'':'<button class="ask" data-ask>이 물건 문의</button>')}</div></div>`).join('')}</div>`;
   box.querySelectorAll('.mitem').forEach(c=>{const it=items.find(x=>x.id===c.dataset.id);
