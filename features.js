@@ -240,7 +240,7 @@ function pickItemPhoto(i,row){
   const inp=document.createElement('input');inp.type='file';inp.accept='image/*';
   inp.onchange=async()=>{const f=inp.files[0];if(!f)return;const blob=await shrink(f,1280,0.82);mItems[i].blob=blob;mItems[i].url=URL.createObjectURL(blob);renderMItems();
     const ip=W.querySelector(`.itemrow[data-i="${i}"] .ip`);ip&&ip.classList.add('busy');
-    try{const {data,error}=await sb.functions.invoke('analyze-item',{body:{images:[await b64(await shrink(blob,768,0.75))],category:'sale'}});
+    try{const {data,error}=await sb.functions.invoke('analyze-item',{body:{images:[await b64(blob)],category:'sale'}});
       if(!error&&data){if(!mItems[i].name&&data.title)mItems[i].name=data.title.replace(/\s*\(.*?\)\s*$/,'').slice(0,60);if(mItems[i].price===''&&data.price!=null)mItems[i].price=String(data.price)}}catch(e){}
     renderMItems()};
   inp.click();
